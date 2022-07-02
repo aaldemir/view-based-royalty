@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/src/backend/contracts/PayPerView.sol": {
-      "lastModificationDate": 1656211546814,
-      "contentHash": "8fd74b7452dfd7b625b0672768aa164b",
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/src/backend/contracts/PayPerView.sol": {
+      "lastModificationDate": 1656800021708,
+      "contentHash": "f7bed1102df7634e6c848ff3e1096e94",
       "sourceName": "src/backend/contracts/PayPerView.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -29,8 +29,11 @@
         }
       },
       "imports": [
+        "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol",
         "@openzeppelin/contracts/token/ERC721/ERC721.sol",
-        "@openzeppelin/contracts/utils/math/SafeMath.sol"
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/utils/math/SafeMath.sol",
+        "hardhat/console.sol"
       ],
       "versionPragmas": [
         "^0.8.4"
@@ -39,8 +42,8 @@
         "PayPerView"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
-      "lastModificationDate": 1656188663452,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+      "lastModificationDate": 1656467682795,
       "contentHash": "21b9f3bdb3e60f56ea81361c37420136",
       "sourceName": "@openzeppelin/contracts/token/ERC721/ERC721.sol",
       "solcConfig": {
@@ -82,8 +85,8 @@
         "ERC721"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
-      "lastModificationDate": 1656188664636,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol": {
+      "lastModificationDate": 1656467683683,
       "contentHash": "2337f0279507b5edf14a07067adf0d05",
       "sourceName": "@openzeppelin/contracts/utils/math/SafeMath.sol",
       "solcConfig": {
@@ -117,8 +120,8 @@
         "SafeMath"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
-      "lastModificationDate": 1656188663996,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+      "lastModificationDate": 1656467683322,
       "contentHash": "cd8e72e5859bddd5fd26b2fb5c51c846",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
       "solcConfig": {
@@ -154,8 +157,8 @@
         "IERC721"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
-      "lastModificationDate": 1656188664041,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+      "lastModificationDate": 1656467683354,
       "contentHash": "c22d4395e33763de693fd440c6fd10e1",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
       "solcConfig": {
@@ -189,8 +192,8 @@
         "IERC721Receiver"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
-      "lastModificationDate": 1656188664033,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+      "lastModificationDate": 1656467683341,
       "contentHash": "efbc0d15b80a74e34dbe8da0f3e879bb",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
       "solcConfig": {
@@ -226,8 +229,8 @@
         "IERC721Metadata"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/utils/Address.sol": {
-      "lastModificationDate": 1656188662647,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/utils/Address.sol": {
+      "lastModificationDate": 1656467682248,
       "contentHash": "ad714a6368ee7d43cded6bbe8af0b155",
       "sourceName": "@openzeppelin/contracts/utils/Address.sol",
       "solcConfig": {
@@ -261,8 +264,8 @@
         "Address"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/utils/Context.sol": {
-      "lastModificationDate": 1656188662790,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1656467682328,
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -296,8 +299,8 @@
         "Context"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
-      "lastModificationDate": 1656188664674,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+      "lastModificationDate": 1656467683701,
       "contentHash": "9c54c6c065d9e590fdcdd72c451425b9",
       "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
@@ -331,8 +334,8 @@
         "Strings"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
-      "lastModificationDate": 1656188663078,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+      "lastModificationDate": 1656467682586,
       "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
       "solcConfig": {
@@ -368,8 +371,8 @@
         "ERC165"
       ]
     },
-    "/Users/alpayaldemir/Desktop/hack_eth_nyc/view-based-royalty/node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
-      "lastModificationDate": 1656188663905,
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+      "lastModificationDate": 1656467683215,
       "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
@@ -401,6 +404,111 @@
       ],
       "artifacts": [
         "IERC165"
+      ]
+    },
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol": {
+      "lastModificationDate": 1656638607923,
+      "contentHash": "611f626b2447ccff9ba5332460fd217f",
+      "sourceName": "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "AggregatorV3Interface"
+      ]
+    },
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1656468147222,
+      "contentHash": "ad7c2d0af148c8f9f097d65deeb4da6b",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/aea/Desktop/vbr/view-based-royalty/view-based-royalty/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1656467783009,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
       ]
     }
   }
