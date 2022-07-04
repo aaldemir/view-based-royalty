@@ -13,7 +13,7 @@ TODO:
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "hardhat/console.sol";
 
@@ -77,13 +77,15 @@ contract PayPerView is ERC721 {
     *
     * @param dollars {uint16} dollars in pennies (1000 === $10)
     */
-    function convertDollarsToNanoAvax(uint64 dollars) internal view returns (uint) {
+    function convertDollarsToNanoAvax(uint64 dollars) public view returns (uint) {
         uint price = uint(getLatestPrice());
         uint factoredDollars = uint(dollars) * 1e15;
+        // returns value with 9 decimal places (last number rounded)
         return factoredDollars.div(price);
     }
 
     function getLatestPrice() public view returns (int) {
+        // AVAX/USD returns value with 8 decimal places
         (,int price,,,) = priceFeed.latestRoundData();
         return price;
     }
@@ -113,7 +115,8 @@ contract PayPerView is ERC721 {
     }
 
     /**
-    * Checks if an address can view a token.
+    * Adds a viewer by taking payment with the gas paying asset.
+    * Allocates amounts to recipients based on allocation percentages.
     *
     * @param viewer {address}
     * @param _id {uint} tokenId
@@ -124,6 +127,30 @@ contract PayPerView is ERC721 {
         for (uint8 i = 0; i < royaltyRecipientsByToken[_id].length; i++) {
             address recipient = royaltyRecipientsByToken[_id][i];
             _redeemableRoyalty[_id][recipient] = _redeemableRoyalty[_id][recipient].add(_calculateRoyaltyToRecipient(_id, msg.value, recipient));
+        }
+        // set the expiration time for when the viewer can no longer view the _id
+        // should be the current time stamp plus the view duration
+        viewExpiration[viewer][_id] = block.timestamp.add(_viewDuration[_id]);
+    }
+
+    /**
+    * Adds a viewer by taking payment with a stable coin.
+    * Allocates amounts to recipients based on allocation percentages.
+    *
+    * @param viewer {address}
+    * @param _id {uint} tokenId
+    */
+    function addViewerWithStable(address viewer, uint _id, address stable) external {
+        require(_exists(_id), "_id does not exist");
+        IERC20Metadata stableContract = IERC20Metadata(stable);
+        uint8 decimals = stableContract.decimals();
+        uint adjustedAmountToView = _amountToView[_id] * 10**(decimals - 2);
+        stableContract.transferFrom(msg.sender, address(this), adjustedAmountToView);
+
+        // allocate to recipients based on percentages
+        for (uint8 i = 0; i < royaltyRecipientsByToken[_id].length; i++) {
+            address recipient = royaltyRecipientsByToken[_id][i];
+            _redeemableRoyalty[_id][recipient] = _redeemableRoyalty[_id][recipient].add(_calculateStableRoyaltyToRecipient(_id, adjustedAmountToView, recipient));
         }
         // set the expiration time for when the viewer can no longer view the _id
         // should be the current time stamp plus the view duration
@@ -301,12 +328,20 @@ contract PayPerView is ERC721 {
     }
 
     function _requireAmountIsEnoughToView(uint _id) private view {
-        require(msg.value >= convertDollarsToNanoAvax(_amountToView[_id]), "insufficient value");
+        if (msg.value > 0) {
+            // TODO: use price feed
+            require(msg.value >= convertDollarsToNanoAvax(_amountToView[_id]), "insufficient value");
+        }
     }
 
     function _canView(address viewer, uint _id) private view returns(bool) {
         uint currentViewExpiration = viewExpiration[viewer][_id];
         return _isApprovedOrOwner(viewer, _id) || currentViewExpiration > block.timestamp;
+    }
+
+    function _calculateStableRoyaltyToRecipient(uint _id, uint adjustedAmount, address recipient) private view returns (uint) {
+        // amountToView adjusted to stable decimals * recipient allocation / aggregate_allocation
+        return adjustedAmount.mul(allocationOfRoyalties[_id][recipient]).div(AGGREGATE_ALLOCATION);
     }
 
     function _calculateRoyaltyToRecipient(uint _id, uint amount, address recipient) private view returns(uint) {

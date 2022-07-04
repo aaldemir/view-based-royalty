@@ -1,15 +1,37 @@
+// run 'npx hardhat node' in 1 terminal tab to fork network from archival node
+// test with 'npx hardhat test'
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { getTokenURI } = require('./testUtils');
 
+const TOKEN_NAME = 'PayPerView';
+const TOKEN_SYMBOL = 'PPV';
+const PRICE_FEED_AVAX_USD_MAIN = '0x0A77230d17318075983913bC2145DB16C7366156';
+//const PRICE_FEED_USDC_USD_MAIN = '0xF096872672F44d6EBA71458D74fe67F9a77a23B9';
+
+async function deploy() {
+  const ViewBasedRoyalty = await ethers.getContractFactory('PayPerView');
+  const ppv = await ViewBasedRoyalty.deploy(TOKEN_NAME, TOKEN_SYMBOL);
+  await ppv.deployed();
+  return ppv;
+}
+
+async function initializeWithPriceFeedAddress(
+  contractInstance,
+  deployerAddress,
+  priceFeedAddress
+) {
+  await contractInstance.connect(deployerAddress).init(priceFeedAddress);
+}
+
 describe('PayPerView.sol', function () {
+  let addr1, addr2, addr3;
   let ppv;
-  const TOKEN_NAME = 'PayPerView';
-  const TOKEN_SYMBOL = 'PPV';
+
   before(async function () {
-    const ViewBasedRoyalty = await ethers.getContractFactory('PayPerView');
-    ppv = await ViewBasedRoyalty.deploy(TOKEN_NAME, TOKEN_SYMBOL);
-    await ppv.deployed();
+    ppv = await deploy();
+    [addr1, addr2, addr3] = await ethers.getSigners();
+    await initializeWithPriceFeedAddress(ppv, addr1, PRICE_FEED_AVAX_USD_MAIN);
   });
 
   it('should get name', async function () {
@@ -21,12 +43,7 @@ describe('PayPerView.sol', function () {
   });
 
   describe('function tests', function () {
-    let addr1, addr2, addr3;
     let tokenCount = 0;
-
-    before(async function () {
-      [addr1, addr2, addr3] = await ethers.getSigners();
-    });
 
     describe('mint', function () {
       it('should mint a token starting with id 1', async function () {
@@ -86,6 +103,33 @@ describe('PayPerView.sol', function () {
         expect(tokenIdsRedeemableAddr3[0]).to.equal(tokenCount);
       });
     });
+
+    describe('price feed tests', function () {
+      it('getLatestPrice', async function () {
+        const latestPrice = await ppv.getLatestPrice();
+        // based on block 16864986
+        expect(latestPrice).to.equal(ethers.BigNumber.from(1669820789));
+      });
+
+      it('convertDollarsToNanoAvax', async function () {
+        const dollarsToExpectedPriceMap = {
+          1: 59886666,
+          1500: 898299991,
+          1501: 898898858,
+          99999900: 59886606190800,
+          10101010101000: 6049158189630000000,
+        };
+        let convertedAmount;
+        Object.keys(dollarsToExpectedPriceMap).forEach(async (cents) => {
+          convertedAmount = await ppv.convertDollarsToNanoAvax(cents);
+          expect(convertedAmount).to.equal(
+            ethers.BigNumber.from(dollarsToExpectedPriceMap[cents])
+          );
+        });
+      });
+    });
+
+    describe('addViewerWithStable', function () {});
 
     describe('addViewer', function () {
       // what happens if royaltyRecipientsByToken is not set for the _id
